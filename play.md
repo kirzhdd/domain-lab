@@ -60,3 +60,9 @@ Valid starting       Expires              Service principal
 [root@dc1 ~]#
 ```
 Kerberos видит второй домен test.win
+
+
+2. как добавить право на вход через службу удалённых рабочих столов:\
+через win+R открыть SystemPropertiesRemote.exe\
+добавить пользователя или группу пользователей\
+вводить имя как ```DOMAIN-NAME\user```, где DOMAIN-NAME - короткое имя домена

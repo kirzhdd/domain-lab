@@ -66,3 +66,44 @@ Kerberos видит второй домен test.win
 через win+R открыть SystemPropertiesRemote.exe\
 добавить пользователя или группу пользователей\
 вводить имя как ```DOMAIN-NAME\user```, где DOMAIN-NAME - короткое имя домена
+
+3. проблема со входом доменных пользователей\
+нужно разрешить удалённое подключение к рабочему столу на альтовских станциях\
+-нужно добавить группе "domain users" локальные роли "users" и "powerusers"\
+почему то rolelst и roleadd находятся по разным путям\
+```
+[root@domain-client-1 ~]# /usr/sbin/roleadd "domain users" users
+[root@domain-client-1 ~]# /usr/bin/rolelst
+domain users:users
+[root@domain-client-1 ~]# /usr/sbin/roleadd "domain users" powerusers
+[root@domain-client-1 ~]# /usr/bin/rolelst
+domain users:users,powerusers
+```
+
+-но почему то подключение всё равно не разрешается
+```
+[root@domain-client-1 ~]# journalctl -u sshd -f
+июн 03 11:30:25 domain-client-1.test.alt sshd[3232941]: User kira from 192.168.7.110 not allowed because none of user's groups are listed in AllowGroups
+```
+видимо настройки ssh и rdp отдельно запрещают 
+
+по ssh\
+-найти конфиг (почему то он не в обычном месте)
+```
+[root@domain-client-1 ~]# find / -name "sshd_config"
+/etc/openssh/sshd_config
+```
+там проверить строчку
+```Allowed groups``` - там должен быть remote
+группа remote входит в группу powerusers\
+у меня долго не хотело подключаться, помог перезапуск sssd
+
+по rdp\
+в конфиге ```/etc/xrdp/sesman.ini``` указано, что доступ имеют только пользователи из группы tsusers -> нужно добавить роли tsusers для "domain users"
+```
+[root@domain-client-1 ~]# /usr/sbin/roleadd "domain users" tsusers
+[root@domain-client-1 ~]# /usr/bin/rolelst
+domain users:users,powerusers,tsusers
+```
+
+и подключение работает!

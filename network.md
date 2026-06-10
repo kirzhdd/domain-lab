@@ -10,8 +10,8 @@
 
 серверы стенда в виде таблицы:
 
-alt домен
-FQDN домена - test.alt
+alt домен\
+FQDN домена - test.alt\
 NetBIOS - TEST
 |имя             | адрес хоста | dns| роль |
 | :--- | :---: | :---: | :---: |
@@ -20,8 +20,8 @@ NetBIOS - TEST
 |domain-client-1 | 241         | 192.168.7.141| рс (gnome) |
 |domain-client-2 | 204         | 192.168.7.141| рс (kde)   |
 
-windows домен
-FQDN домена - test.win
+windows домен\
+FQDN домена - test.win\
 NetBIOS - WN
 |имя             | адрес хоста | dns| роль |
 | :--- | :---: | :---: | :---: |
